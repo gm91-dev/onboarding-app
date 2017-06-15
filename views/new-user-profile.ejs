@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Add a new user</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=mrkz9axrxc8l71hpd222kl37jscctz9w288gv1ek45zrb48t"></script>
+  <script>
+  tinymce.init({
+    selector:'textarea',
+    plugins : 'advlist autolink link image lists charmap print preview'
+  });
+  </script>
+  <style>
+    .top5 { margin-top:5px; }
+    .top7 { margin-top:7px; }
+    .top10 { margin-top:10px; }
+    .top15 { margin-top:15px; }
+    .top17 { margin-top:17px; }
+    .top20 { margin-top:20px; }
+    .top25 { margin-top:25px; }
+    .top30 { margin-top:30px; }
+    .bottom5 { margin-bottom:5px; }
+    .bottom7 { margin-bottom:7px; }
+    .bottom10 { margin-bottom:10px; }
+    .bottom15 { margin-bottom:15px; }
+    .bottom17 { margin-bottom:17px; }
+    .bottom20 { margin-bottom:20px; }
+    .bottom25 { margin-bottom:25px; }
+    .bottom30 { margin-bottom:30px; }
+    .btn-xl {
+      padding: 18px 28px;
+      font-size: 22px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="panel panel-primary">
+    	<div class="panel-heading text-center">
+    		<h3>New User Profile fields</h3>
+    	</div>
+    	<div class="panel-body">
+        <div class="panel-heading text-center">
+    	      <h4>ROLE</h4>
+    		</div>
+      </div>
+    </div>
+    <div class="row top30 bottom30">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-addon input-lg" id="basic-addon-role">Role</span>
+          <input id="role" type="text" class="form-control input-lg" placeholder="Role" aria-describedby="basic-addon1">
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="panel-heading text-center">
+            <h4>USER DETAILS</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-addon input-lg" id="basic-addon-name">Name</span>
+          <input id="name" type="text" class="form-control input-lg" placeholder="Name" aria-describedby="basic-addon1">
+        </div>
+      </div>
+    </div>
+    <div class="row top25">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-addon input-lg" id="basic-addon-surname">Surname</span>
+          <input id="surname" type="text" class="form-control input-lg" placeholder="Surname" aria-describedby="basic-addon1">
+        </div>
+      </div>
+    </div>
+    <div class="row top25">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-addon input-lg" id="basic-addon-email">Email</span>
+          <input id="email" type="email" class="form-control input-lg" placeholder="Email" aria-describedby="basic-addon1">
+        </div>
+      </div>
+    </div>
+    <div class="row top25">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-addon input-lg" id="basic-addon-phone">Phone</span>
+          <input id="phone" type="text" class="form-control input-lg" placeholder="Telephone number" aria-describedby="basic-addon1">
+        </div>
+      </div>
+    </div>
+    <div class="row top25">
+      <button id="save-user-button" type="button" class="btn btn-primary btn-lg btn-block">Save the new user</button>
+    </div>
+  </div>
+</body>
+</html>
