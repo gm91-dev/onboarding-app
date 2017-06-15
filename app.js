@@ -18,8 +18,11 @@ var app = express();
 // request module provides a simple way to create HTTP requests in Node.js
 var request = require('request');
 
+// path module
+var path = require('path');
+
 // routes file
-var routes = require('./routes')(app);
+// var routes = require('./routes')(app);
 
 // getting the main page (index.html)
 app.get('/', function (req, res) {
