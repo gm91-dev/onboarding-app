@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Add a new user</title>
+  <title><%= title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -37,6 +37,34 @@
       border-radius: 8px;
     }
   </style>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#save-user-button").click(function () {
+        // at first check if all the user fields are filled up (client-side)
+        //
+        $.post('/user/save', {
+  			  email : param_value1,
+          name : param_value2,
+          surname : param_value3,
+          role : param_value4,
+          telephone : param_value5,
+          description : param_value6,
+  		  })
+          .done(function(){
+      			alert('<h2>The new user has been successfully added!</h2>', function(){
+      				// clear all the user fields
+              //
+              window.location.reload();
+    			  });
+    		  })
+          .fail(function(){
+    			  alert('<h2>Sorry, an error occurred during the operation.<br>Please retry later...</h2>', function(){
+    				  window.location.reload();
+    			  });
+    		  });
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="container">

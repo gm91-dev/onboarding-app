@@ -22,7 +22,7 @@ var request = require('request');
 var path = require('path');
 
 // routes file
-// var routes = require('./routes')(app);
+var routes = require('./routes')(app);
 
 // getting the main page (index.html)
 app.get('/', function (req, res) {
@@ -34,6 +34,9 @@ app.use(express.static(__dirname + '/public'));
 
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
+
+var PostgreSQL_DB_controller = require('./controller/compose-postgresql-connection');
+PostgreSQL_DB_controller.postgresql_database_connection();
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, '0.0.0.0', function() {
