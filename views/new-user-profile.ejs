@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=mrkz9axrxc8l71hpd222kl37jscctz9w288gv1ek45zrb48t"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
   <script>
   tinymce.init({
     selector:'textarea',
@@ -39,29 +40,48 @@
   </style>
   <script type="text/javascript">
     $(document).ready(function() {
+      function checkUserFields () {
+        alert ('zero');
+        var ret = false;
+        if( $.trim($('#email').val()) != '' &&
+            /$.trim($('#name').val()) != '' &&
+            $.trim($('#surname').val()) != '' &&
+            $.trim($('#role').val()) != '' &&
+            $.trim($('#telephone').val()) != '' //&&
+          /*$.trim($('#descritpion').val()) != ''*/ ) {
+              alert ('true');
+              ret = true;
+            }
+            alert('false');
+        return ret;
+      }
       $("#save-user-button").click(function () {
-        // at first check if all the user fields are filled up (client-side)
-        //
-        $.post('/user/save', {
-  			  email : param_value1,
-          name : param_value2,
-          surname : param_value3,
-          role : param_value4,
-          telephone : param_value5,
-          description : param_value6,
-  		  })
-          .done(function(){
-      			alert('<h2>The new user has been successfully added!</h2>', function(){
-      				// clear all the user fields
-              //
-              window.location.reload();
-    			  });
+        if (!checkUserFields()) {
+          alert('we we we');
+          bootbox.alert("Please fill up all the user fields!");
+        }
+        else {
+          $.post('/user/save', {
+    			  email : $('#email').val(),
+            name : $('#name').val(),
+            surname : $('#surname').val(),
+            role : $('#role').val(),
+            telephone : $('#telephone').val(),
+            description : $('#description').val()
     		  })
-          .fail(function(){
-    			  alert('<h2>Sorry, an error occurred during the operation.<br>Please retry later...</h2>', function(){
-    				  window.location.reload();
-    			  });
-    		  });
+            .done(function(){
+        			alert('<h2>The new user has been successfully added!</h2>', function(){
+        				// clear all the user fields
+                //
+                window.location.reload();
+      			  });
+      		  })
+            .fail(function(){
+      			  alert('<h2>Sorry, an error occurred during the operation.<br>Please retry later...</h2>', function(){
+      				  window.location.reload();
+      			 });
+      		 });
+        }
       });
     });
   </script>
@@ -121,7 +141,7 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-phone">Phone</span>
-          <input id="phone" type="text" class="form-control input-lg" placeholder="Telephone number" aria-describedby="basic-addon1">
+          <input id="telephone" type="text" class="form-control input-lg" placeholder="Telephone number" aria-describedby="basic-addon1">
         </div>
       </div>
     </div>
