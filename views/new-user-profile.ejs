@@ -41,42 +41,53 @@
   <script type="text/javascript">
     $(document).ready(function() {
       function checkUserFields () {
-        alert ('zero');
         var ret = false;
         if( $.trim($('#email').val()) != '' &&
-            /$.trim($('#name').val()) != '' &&
+            $.trim($('#name').val()) != '' &&
             $.trim($('#surname').val()) != '' &&
             $.trim($('#role').val()) != '' &&
             $.trim($('#telephone').val()) != '' //&&
-          /*$.trim($('#descritpion').val()) != ''*/ ) {
-              alert ('true');
+          /*$.trim($('#descritpion').val()) != ''*/) {
               ret = true;
             }
-            alert('false');
         return ret;
       }
+      function clearUserFields () {
+        $('#email').val('');
+        $('#name').val('');
+        $('#surname').val('');
+        $('#role').val('');
+        $('#telephone').val('');
+        $('#description').val('');
+      }
+      // The post request below is to add a new user in the database
       $("#save-user-button").click(function () {
         if (!checkUserFields()) {
-          alert('we we we');
           bootbox.alert("Please fill up all the user fields!");
         }
         else {
+          var email = $('#email').val();
+          var name = $('#name').val();
+          var surname = $('#surname').val();
+          var role = $('#role').val();
+          var telephone = $('#telephone').val();
+          var description = $('#description').val();
           $.post('/user/save', {
-    			  email : $('#email').val(),
-            name : $('#name').val(),
-            surname : $('#surname').val(),
-            role : $('#role').val(),
-            telephone : $('#telephone').val(),
-            description : $('#description').val()
+    			  email : email,
+            name : name,
+            surname : surname,
+            role : role,
+            telephone : telephone,
+            description : description
     		  })
             .done(function(){
         			alert('<h2>The new user has been successfully added!</h2>', function(){
-        				// clear all the user fields
-                //
+        				clearUserFields();
                 window.location.reload();
       			  });
       		  })
-            .fail(function(){
+            .fail(function(e){
+              alert(JSON.stringify(e));
       			  alert('<h2>Sorry, an error occurred during the operation.<br>Please retry later...</h2>', function(){
       				  window.location.reload();
       			 });
@@ -137,11 +148,26 @@
         </div>
       </div>
     </div>
-    <div class="row top25">
+    <div class="row top25 bottom30">
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-phone">Phone</span>
           <input id="telephone" type="text" class="form-control input-lg" placeholder="Telephone number" aria-describedby="basic-addon1">
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="panel-heading text-center">
+            <h4>DESCRIPTION</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row top25">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea class="form-control" rows="5" id="description"></textarea>
         </div>
       </div>
     </div>

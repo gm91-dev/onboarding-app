@@ -13,7 +13,16 @@ var express = require('express');
 var cfenv = require('cfenv');
 
 // create a new express server
+
+var bodyParser = require('body-parser');
+
 var app = express();
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.use(bodyParser.json());
 
 // request module provides a simple way to create HTTP requests in Node.js
 var request = require('request');

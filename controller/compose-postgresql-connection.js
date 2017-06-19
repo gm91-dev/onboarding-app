@@ -1,11 +1,14 @@
 var express = require('express');
-var app = express();
 
 var bodyParser = require('body-parser');
 
+var app = express();
+
 app.use(bodyParser.urlencoded({
-  extended: false
+  extended: true
 }));
+
+app.use(bodyParser.json());
 
 var Q = require ('q');
 
@@ -56,14 +59,20 @@ var client = new pg.Client(config);
 
 // This function to set up the connection with PostgreSQL database
 module.exports.postgresql_database_connection = function() {
+  console.log("creating table");
   client.connect(function(err) {
     if (err) {
+     console.log("error connecting");
      console.log(err);
     }
     else {
-      client.query('CREATE TABLE IF NOT EXISTS users (email varchar(256) NOT NULL PRIMARY KEY, name varchar(256) NOT NULL, surname varchar(256) NOT NULL, telephone int NOT NULL, role varchar(256) NOT NULL, description varchar(256) NOT NULL)', function (err,result){
+      client.query('CREATE TABLE IF NOT EXISTS users (email varchar(256) PRIMARY KEY NOT NULL, name varchar(256) NOT NULL, surname varchar(256) NOT NULL, telephone varchar(256) NOT NULL, role varchar(256) NOT NULL, description varchar(256))', function (err,result){
         if (err) {
+          console.log("error with query");
           console.log(err);
+        }
+        else {
+          console.log("table created");
         }
       });
     }
@@ -71,26 +80,31 @@ module.exports.postgresql_database_connection = function() {
 };
 
 // This function is to create and store a new user into the PostgreSQL database with all the needed information
-module.exports.postgresql_save_user = function(request) {
+module.exports.postgresql_save_user = function(email, name, surname, role, telephone, description) {
+  console.log("reading parameters");
+  console.log("reading email : " + email);
   var deferred = Q.defer();
   // set up a new client using our config details
   var client = new pg.Client(config);
   client.connect(function(err) {
     if (err) {
+     console.log("errore 1");
      console.log(err);
      deferred.reject();
     }
     else {
-      var queryText = 'INSERT INTO users(email,name,surname,telphone,role,description) VALUES(?, ?, ?, ?, ?, ?)';
-      client.query(queryText, [request.value1,request.value2, request.value3, request.value4, request.value5, request.value6], function (error,result){
+      var queryText = 'INSERT INTO users(email,name,surname,telephone,role,description) VALUES($1, $2, $3, $4, $5, $6)';
+      client.query(queryText, [email, name, surname, telephone, role, description], function (error,result){
         if (error) {
-         console.log(err);
+         console.log("errore 2");
+         console.log(error);
          deferred.reject();
         }
         else {
          console.log("Saving the new user into the postegresql database: ");
          console.log(result);
-         deferred.resolve(result); //check how result is printed
+         //check how result is printed and then manage it where called
+         deferred.resolve(result);
         }
       });
     }
