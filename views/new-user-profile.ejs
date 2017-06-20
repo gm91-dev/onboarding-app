@@ -82,11 +82,18 @@
             telephone : telephone,
             description : description
     		  })
-            .done(function(){
-              clearUserFields();
-        			alert('<h2>The new user has been successfully added!</h2>', function(){
-                window.location.reload();
-      			  });
+            .done(function(data){
+              if(data.duplicate_user == true) { //if it's true means the user already exists
+                alert('<h2>The inserted user already exists. Please choose a different email!</h2>', function(){
+                  window.location.reload();
+                });
+              }
+              else {
+                clearUserFields();
+          			alert('<h2>The new user has been successfully added!</h2>', function(){
+                  window.location.reload();
+        			  });
+              }
       		  })
             .fail(function(e){
               alert(JSON.stringify(e));

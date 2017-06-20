@@ -40,24 +40,35 @@ module.exports = function (app) {
     var telephone = req.body.telephone;
     var description = req.body.description;
 
-    // storing data into database
-    //postgresql_db_controller.postgresql_save_user(email, name, surname, role, telephone, description);
-
-    postgresql_db_controller.postgresql_save_user(email, name, surname, role, telephone, description).then(function(result){
-      console.log("RESULT: "+result);
-      if(result == null){
-				res.writeHead(404);
-				res.end();
-				return;
-			}
-      // TO DO
-      // manage the result (?)
-      console.log("result of storing data : " + result);
-      res.writeHead(200);
-			res.end();
+    //checking if the user already exists
+    postgresql_db_controller.postgresql_check_user(email).then(function(result){
+      console.log("ROW COUNT : " + result.rowCount);
+      console.log("Result existing user... : " + JSON.stringify(result));
+      // checking if a user already exists - if rowcount is 0 the user can be stored into the database
+      if (result.rowCount == 0) {
+        // storing data into database
+        postgresql_db_controller.postgresql_save_user(email, name, surname, role, telephone, description).then(function(result){
+          console.log("RESULT: "+result);
+          if(result == null){
+    				res.writeHead(404);
+    				res.end();
+    				return;
+    			}
+          // TO DO
+          // manage the result (?)
+          console.log("result of storing data : " + result);
+          res.writeHead(200);
+    			res.end();
+        });
+      }
+      else {
+        var result_data = {duplicate_user : true};
+        res.send(result_data);
+        res.end();
+      }
     });
-
   });
+
 
   // route for creating a new project
 

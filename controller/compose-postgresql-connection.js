@@ -66,7 +66,7 @@ module.exports.postgresql_database_connection = function() {
      console.log(err);
     }
     else {
-      client.query('CREATE TABLE IF NOT EXISTS users (email varchar(256) PRIMARY KEY NOT NULL, name varchar(256) NOT NULL, surname varchar(256) NOT NULL, telephone varchar(256) NOT NULL, role varchar(256) NOT NULL, description varchar(256))', function (err,result){
+      client.query('CREATE TABLE IF NOT EXISTS users (email varchar(256) NOT NULL, name varchar(256) NOT NULL, surname varchar(256) NOT NULL, telephone varchar(256) NOT NULL, role varchar(256) NOT NULL, description varchar(256))', function (err,result){
         if (err) {
           console.log("error with query");
           console.log(err);
@@ -103,6 +103,38 @@ module.exports.postgresql_save_user = function(email, name, surname, role, telep
         else {
          console.log("Saving the new user into the postegresql database: ");
          console.log(result);
+         //check how result is printed and then manage it where called
+         deferred.resolve(result);
+        }
+      });
+    }
+  });
+  return deferred.promise;
+};
+
+// This function is to check if the user already exists
+module.exports.postgresql_check_user = function(email){
+  console.log("checking if a specific user already exists");
+  var deferred = Q.defer();
+  // set up a new client using our config details
+  var client = new pg.Client(config);
+  client.connect(function(err) {
+    if (err) {
+     console.log("error in checking a specific user");
+     console.log(err);
+     deferred.reject();
+    }
+    else {
+      var queryText = 'SELECT 1 FROM users where email = $1 LIMIT 1';
+      client.query(queryText, [email], function (error,result){
+        if (error) {
+         console.log("error in retrieving user");
+         console.log(error);
+         deferred.reject();
+        }
+        else {
+         console.log("Extracting information from the database related to the specified user: ");
+         //console.log(JSON.stringify(result));
          //check how result is printed and then manage it where called
          deferred.resolve(result);
         }
