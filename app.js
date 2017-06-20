@@ -41,6 +41,8 @@ app.get('/', function (req, res) {
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
+// app.use('/static', express.static(__dirname + '/static'));
+
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
 

@@ -9,6 +9,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=mrkz9axrxc8l71hpd222kl37jscctz9w288gv1ek45zrb48t"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+  
   <script>
     tinymce.init({
       selector:'textarea',
@@ -38,6 +39,38 @@
       border-radius: 8px;
     }
   </style>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#edit-admin-info-button").click(function () {
+        var email = $('#admin-email').val();
+        var name = $('#admin-name').val();
+        var surname = $('#surname').val();
+        var role = $('#role').val();
+        var telephone = $('#telephone').val();
+        var description = $('#description').val();
+        $.post('/user/save', {
+  			  email : email,
+          name : name,
+          surname : surname,
+          role : role,
+          telephone : telephone,
+          description : description
+  		  })
+          .done(function(){
+      			alert('<h2>The new user has been successfully added!</h2>', function(){
+      				clearUserFields();
+              window.location.reload();
+    			  });
+    		  })
+          .fail(function(e){
+            alert(JSON.stringify(e));
+    			  alert('<h2>Sorry, an error occurred during the operation.<br>Please retry later...</h2>', function(){
+    				  window.location.reload();
+    			 });
+    		 });
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="container">
@@ -55,7 +88,7 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-name">Name</span>
-          <input id="name" type="text" class="form-control input-lg" placeholder="Name" aria-describedby="basic-addon1">
+          <input id="admin-name" type="text" class="form-control input-lg" placeholder="Name" aria-describedby="basic-addon1">
         </div>
       </div>
     </div>
@@ -63,7 +96,7 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-surname">Surname</span>
-          <input id="surname" type="text" class="form-control input-lg" placeholder="Surname" aria-describedby="basic-addon1">
+          <input id="admin-surname" type="text" class="form-control input-lg" placeholder="Surname" aria-describedby="basic-addon1">
         </div>
       </div>
     </div>
@@ -71,7 +104,7 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-email">Email</span>
-          <input id="email" type="email" class="form-control input-lg" placeholder="Email" aria-describedby="basic-addon1">
+          <input id="admin-email" type="email" class="form-control input-lg" placeholder="Email" aria-describedby="basic-addon1">
         </div>
       </div>
     </div>
@@ -79,7 +112,7 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-phone">Phone</span>
-          <input id="phone" type="text" class="form-control input-lg" placeholder="Telephone number" aria-describedby="basic-addon1">
+          <input id="admin-telephone" type="text" class="form-control input-lg" placeholder="Telephone number" aria-describedby="basic-addon1">
         </div>
       </div>
     </div>
@@ -87,12 +120,12 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="description">Description:</label>
-          <textarea class="form-control" rows="5" id="description"></textarea>
+          <textarea class="form-control" rows="5" id="admin-description"></textarea>
         </div>
       </div>
     </div>
     <div class="row top25">
-      <button id="save-button" type="button" class="btn btn-primary btn-lg btn-block">Save</button>
+      <button id="edit-admin-info-button" type="button" class="btn btn-primary btn-lg btn-block">Edit Admin info</button>
     </div>
   </div>
 </body>

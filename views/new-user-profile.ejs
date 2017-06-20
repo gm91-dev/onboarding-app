@@ -46,20 +46,22 @@
             $.trim($('#name').val()) != '' &&
             $.trim($('#surname').val()) != '' &&
             $.trim($('#role').val()) != '' &&
-            $.trim($('#telephone').val()) != '' //&&
-          /*$.trim($('#descritpion').val()) != ''*/) {
+            $.trim($('#telephone').val()) != '' &&
+            tinymce.get('description').getContent() != '') {
               ret = true;
             }
         return ret;
       }
+
       function clearUserFields () {
         $('#email').val('');
         $('#name').val('');
         $('#surname').val('');
         $('#role').val('');
         $('#telephone').val('');
-        $('#description').val('');
+        tinymce.get('description').setContent('');
       }
+
       // The post request below is to add a new user in the database
       $("#save-user-button").click(function () {
         if (!checkUserFields()) {
@@ -71,7 +73,7 @@
           var surname = $('#surname').val();
           var role = $('#role').val();
           var telephone = $('#telephone').val();
-          var description = $('#description').val();
+          var description = tinymce.get('description').getContent();
           $.post('/user/save', {
     			  email : email,
             name : name,
@@ -81,8 +83,8 @@
             description : description
     		  })
             .done(function(){
+              clearUserFields();
         			alert('<h2>The new user has been successfully added!</h2>', function(){
-        				clearUserFields();
                 window.location.reload();
       			  });
       		  })
