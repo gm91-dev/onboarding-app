@@ -65,8 +65,8 @@
       // Return true if the role of the user is not 'admin', otherwise return false
       function checkUserRole() {
         var ret = true;
-        var user_role = $('#role').val('');
-        if (user_role.toLowerCase().trim() == "admin") {
+        var user_role = $.trim($('#role').val());
+        if (user_role.toLowerCase() === "admin") {
           ret = false;
         }
         return ret;

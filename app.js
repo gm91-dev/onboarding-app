@@ -41,13 +41,15 @@ app.get('/', function (req, res) {
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
-// app.use('/static', express.static(__dirname + '/static'));
-
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
 
 var PostgreSQL_DB_controller = require('./controller/compose-postgresql-connection');
 PostgreSQL_DB_controller.postgresql_database_connection();
+PostgreSQL_DB_controller.check_and_create_admin_user();
+
+var CloudantNoSQL_DB_controller = require('./controller/cloudant-nosql-db-connection');
+CloudantNoSQL_DB_controller.initDBConnection();
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, '0.0.0.0', function() {

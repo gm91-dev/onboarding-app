@@ -24,9 +24,28 @@ module.exports = function (app) {
 
   //route for routing to "editing the admin user info" page
   app.get('/user/admin', function(req, res){
-  	res.render('admin-profile.ejs', {
-  		title : 'Admin profile'
-  	});
+    var role = "admin";
+    // Retrieve the info of the admin user and render the page properly
+    postgresql_db_controller.postgresql_read_admin_info(role).then(function(result){
+      if(result == null){
+        res.writeHead(404);
+        res.end();
+        return;
+      }
+      console.log("result of retrieving admin data : " + result);
+      console.log('JSON.stringify(result) : ' + JSON.stringify(result));
+      console.log('prova stampa : ' + result.rows[0].name);
+      //res.writeHead(200);
+      //res.end();
+      res.render('admin-profile.ejs', {
+    		title : 'Admin profile',
+        email : result.rows[0].email,
+        name : result.rows[0].name,
+        surname : result.rows[0].surname,
+        telephone : result.rows[0].telephone,
+        description : result.rows[0].description
+    	});
+    });
   });
 
   // route for adding and storing a new user into the postgresql databases
@@ -66,6 +85,29 @@ module.exports = function (app) {
         res.send(result_data);
         res.end();
       }
+    });
+  });
+
+
+  // route for updating user admin info
+  app.post('/user/edit/admin', function(req, res){
+    console.log("reading user admin user info......");
+    var email = req.body.email;
+    var name = req.body.name;
+    var surname = req.body.surname;
+    var telephone = req.body.telephone;
+    var description = req.body.description;
+
+    postgresql_db_controller.postgresql_edit_admin_info(email, name, surname, telephone, description).then(function(result){
+      console.log("RESULT admin info: "+result);
+      if(result == null){
+        res.writeHead(404);
+        res.end();
+        return;
+      }
+      console.log("result of updating admin data : " + result);
+      res.writeHead(200);
+      res.end();
     });
   });
 

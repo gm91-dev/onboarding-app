@@ -41,18 +41,54 @@
   </style>
   <script type="text/javascript">
     $(document).ready(function() {
+
+      // Set name field
+      if("<%= name %>" != null){
+			  $('#admin-name').val("<%= name %>");
+		  }
+      else{
+			  $('#admin-name').val("no name");
+		  }
+      // Set surname field
+      if("<%= surname %>" != null){
+			  $('#admin-surname').val("<%= surname %>");
+		  }
+      else{
+			  $('#admin-surname').val("no surname");
+		  }
+      // Set email field
+      if("<%= email %>" != null){
+			  $('#admin-email').val("<%= email %>");
+		  }
+      else{
+			  $('#admin-email').val("no email");
+		  }
+      // Set telephone field
+      if("<%= telephone %>" != null){
+			  $('#admin-telephone').val("<%= telephone %>");
+		  }
+      else{
+			  $('#admin-telephone').val("no telephone");
+		  }
+      // Set description field
+      if("<%= description %>" != null){
+			  tinymce.get('admin-description').setContent('<%= description %>');
+		  }
+      else{
+			  tinymce.get('admin-description').setContent('no description');
+		  }
+
       $("#edit-admin-info-button").click(function () {
-        var email = $('#admin-email').val();
-        var name = $('#admin-name').val();
-        var surname = $('#surname').val();
-        var role = $('#role').val();
-        var telephone = $('#telephone').val();
-        var description = $('#description').val();
-        $.post('/user/save', {
+        var admin_email = $('#admin-email').val();
+        var admin_name = $('#admin-name').val();
+        var admin_surname = $('#admin-surname').val();
+        var admin_telephone = $('#admin-telephone').val();
+        var admin_description = $('#admin-description').val();
+        $.post('/user/edit/admin', {
   			  email : email,
           name : name,
           surname : surname,
-          role : role,
+          role : "admin",
           telephone : telephone,
           description : description
   		  })

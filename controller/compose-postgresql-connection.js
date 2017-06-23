@@ -1,3 +1,5 @@
+var _this = this;
+
 var express = require('express');
 
 var bodyParser = require('body-parser');
@@ -79,6 +81,37 @@ module.exports.postgresql_database_connection = function() {
   });
 };
 
+// This function is to edit info related to the admin user
+module.exports.postgresql_edit_admin_info = function(email, name, surname, telephone, description) {
+  var deferred = Q.defer();
+  // set up a new client using our config details
+  var client = new pg.Client(config);
+  client.connect(function(err) {
+    if (err) {
+     console.log("errore 3");
+     console.log(err);
+     deferred.reject();
+    }
+    else {
+      var queryText = 'UPDATE users SET telephone = $1, description = $2 WHERE users.email= $3';
+      client.query(queryText, [telephone, description, email], function (error,result){
+        if (error) {
+         console.log("errore 4");
+         console.log(error);
+         deferred.reject();
+        }
+        else {
+         console.log("Updating admin user info into the postegresql database: ");
+         console.log(result);
+         //check how result is printed and then manage it where called
+         deferred.resolve(result);
+        }
+      });
+    }
+  });
+  return deferred.promise;
+};
+
 // This function is to create and store a new user into the PostgreSQL database with all the needed information
 module.exports.postgresql_save_user = function(email, name, surname, role, telephone, description) {
   console.log("reading parameters");
@@ -142,4 +175,92 @@ module.exports.postgresql_check_user = function(email){
     }
   });
   return deferred.promise;
+};
+
+// This function is to get user admin info - there's only one user with admin role into the database
+module.exports.postgresql_read_admin_info = function(role) {
+  console.log("retrieving admin info");
+  var deferred = Q.defer();
+  // set up a new client using our config details
+  var client = new pg.Client(config);
+  client.connect(function(err) {
+    if (err) {
+     console.log("errore admin 1");
+     console.log(err);
+     deferred.reject();
+    }
+    else {
+      var queryText = 'SELECT * FROM users WHERE role= $1';
+      client.query(queryText, [role], function (error,result){
+        if (error) {
+         console.log("errore admin 2");
+         console.log(error);
+         deferred.reject();
+        }
+        else {
+         console.log("Reading the admin user info from the postegresql database: ");
+         console.log(result);
+         deferred.resolve(result);
+        }
+      });
+    }
+  });
+  return deferred.promise;
+};
+
+// This function is to check if there is a row with admin user into the database
+module.exports.check_existing_admin = function(role) {
+  var deferred = Q.defer();
+  // set up a new client using our config details
+  var client = new pg.Client(config);
+  client.connect(function(err) {
+    if (err) {
+     console.log(err);
+     deferred.reject();
+    }
+    else {
+      var queryText = 'SELECT 1 FROM users where role = $1 LIMIT 1';
+      client.query(queryText, [role], function (error,result){
+        if (error) {
+         console.log(error);
+         deferred.reject();
+        }
+        else {
+         deferred.resolve(result);
+        }
+      });
+    }
+  });
+  return deferred.promise;
+};
+
+module.exports.check_and_create_admin_user = function() {
+  // Check if an admin exists
+  var role = "admin";
+  _this.check_existing_admin(role).then(function(result){
+    if (result.rowCount == 0) {
+      // create admin user
+      var client = new pg.Client(config);
+      client.connect(function(err) {
+        if (err) {
+         console.log(err);
+        }
+        else {
+          var queryText = 'INSERT INTO users(email,name,surname,telephone,role,description) VALUES($1, $2, $3, $4, $5, $6)';
+          client.query(queryText, ['', '', '', '', role, ''], function (error,result){
+            if (error) {
+             console.log(error);
+            }
+            else {
+             console.log("Creating the new admin user into the postegresql database: ");
+             console.log(result);
+             //check how result is printed and then manage it where called
+            }
+          });
+        }
+      });
+    }
+    else
+      return;
+  });
 };

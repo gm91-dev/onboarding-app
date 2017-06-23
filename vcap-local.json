@@ -1,0 +1,47 @@
+"cloudantNoSQLDB": [
+   {
+    "credentials": {
+     "host": "579c931e-16da-44f9-85ab-2c8184d13a37-bluemix.cloudant.com",
+     "password": "a08b81aa5aa6021499739788799e0cf9a907f4920d266a228359a6bf51c09443",
+     "port": 443,
+     "url": "https://579c931e-16da-44f9-85ab-2c8184d13a37-bluemix:a08b81aa5aa6021499739788799e0cf9a907f4920d266a228359a6bf51c09443@579c931e-16da-44f9-85ab-2c8184d13a37-bluemix.cloudant.com",
+     "username": "579c931e-16da-44f9-85ab-2c8184d13a37-bluemix"
+    },
+    "label": "cloudantNoSQLDB",
+    "name": "cloudant-nosqldb-onboarding",
+    "plan": "Lite",
+    "provider": null,
+    "syslog_drain_url": null,
+    "tags": [
+     "data_management",
+     "ibm_created",
+     "lite",
+     "ibm_dedicated_public"
+    ],
+    "volume_mounts": []
+   }
+  ],
+  "compose-for-postgresql": [
+   {
+    "credentials": {
+     "ca_certificate_base64": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURoVENDQW0yZ0F3SUJBZ0lFV1ViOFZqQU5CZ2txaGtpRzl3MEJBUTBGQURCRU1VSXdRQVlEVlFRREREbEgKYVhWc2FXOHVUVzl1ZEdWdVpYSnZRR2xpYlM1amIyMHRZekF6WVdRMk56QTNaamRsT1RFelpqSmlaRGs1T1RNNApOVGswTUdZeE1HWXdIaGNOTVRjd05qRTRNakl4T1RBeVdoY05NemN3TmpFNE1qSXdNREF3V2pCRU1VSXdRQVlEClZRUURERGxIYVhWc2FXOHVUVzl1ZEdWdVpYSnZRR2xpYlM1amIyMHRZekF6WVdRMk56QTNaamRsT1RFelpqSmkKWkRrNU9UTTROVGswTUdZeE1HWXdnZ0VpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElCRHdBd2dnRUtBb0lCQVFDcAo1YlZiTENEYUdMMlh6NC9LZXVYMEo2aTUvTEF5RzRENzNKUEVSRi9vdmdGUkhwMEpTN3I5VEdPcXlMU1pxYWNsCm15NG5JTXJJQ2NtVGZBMmtTNm5tWit4QzFZWmNUMklFd0FYa09qQlBVeDdRbjNrY0ZwLzEwT0RkOHJORnRKMEEKc0swWEl5NWx1U1YraDR2S1dnNXQzQzY0TmtSdUxxcUJTMVo5SWMxb1FUNzVXaTRVWFZxaFY3eFpzN0Y1NFdRbgo3SzR4VmZSK2dJYVVTZFhrUDVIcFVheVpxVVFHMGc1WnhZYjZhdkswTXZvVElEdlh0UFVFWlNnLzY4aE9seWJ3Clk1QmVDM2puZmVQVDVwb0FWdTJJMGE3K1F0TkI2VW1iZ3lGa2tQekJwWE5ad3MzN0l1V0p0QXZRZTQ4Y2tvTmoKU3ovRjl4aE9Cd3Zuc0YwWGxGTkJBZ01CQUFHamZ6QjlNQjBHQTFVZERnUVdCQlJ2a2Nua1ZZaHI2L3ZJZisvagpSaDl3T0REcklEQU9CZ05WSFE4QkFmOEVCQU1DQWdRd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3RUdDQ3NHCkFRVUZCd01DTUF3R0ExVWRFd1FGTUFNQkFmOHdId1lEVlIwakJCZ3dGb0FVYjVISjVGV0lhK3Y3eUgvdjQwWWYKY0RndzZ5QXdEUVlKS29aSWh2Y05BUUVOQlFBRGdnRUJBQ0o5OFczQit5WHpFTDhaaWVDZ1hDQjV2akdQd3RWSgo1VUVLT2hUS1llenBkVGZIbnNMT1RvNjZQbDdOK3R3VnoyWDNkVmFaaHdvZjVxY0VmcGJYMitBODdLUmVFR3Q1CjZWSlhQNksrOU03czRnZFNvN1o1TU5vUG5HNEFwTFUvbXo1Q3JKMnRJeTMwZFY3WEpiOWM3V1pabGNFeXJKMlcKNkdWRXhlaytmU3hnTDdYMllDeGZ5aG5EZGV2Z05MY1IxRmJxL1ppcytYSjZ1T1lOaE9BYllOUUJZZE53RjhvdgpBRXVydHZucnhJUnBsZkZxYXZPaXNQdVNta0NRS3JrMklpclpXcGhWVjFtQzN0elE5TCsrcm85ZnJpK1hFNzF6Ck1HYkFYL1pSUExuYzFObkdscUtzRDhWOXRPYXFiQ2h1QUluVkF1SitlQUhPME92YmNHekhHVDA9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",
+     "db_type": "postgresql",
+     "deployment_id": "5946fc5215e61d0014001b46",
+     "maps": [],
+     "name": "bmix-dal-yp-0f269c28-7e02-4a47-ac9f-e8470dd9a839",
+     "uri": "postgres://admin:CVAYNWVOFNAIAKFD@sl-us-south-1-portal.2.dblayer.com:17187/compose",
+     "uri_cli": "psql \"sslmode=require host=sl-us-south-1-portal.2.dblayer.com port=17187 dbname=compose user=admin\""
+    },
+    "label": "compose-for-postgresql",
+    "name": "my-compose-for-postgresql-service",
+    "plan": "Standard",
+    "provider": null,
+    "syslog_drain_url": null,
+    "tags": [
+     "big_data",
+     "data_management",
+     "ibm_created"
+    ],
+    "volume_mounts": []
+   }
+  ]
