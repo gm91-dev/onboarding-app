@@ -51,6 +51,7 @@
           async: false,
           success: function(data) {
               checkPhoneNumber = true;
+              bootbox.alert("The phone number has been successfully validated.");
           }
         });
       });
@@ -63,7 +64,6 @@
             $.trim($('#role').val()) != '' &&
             tinymce.get('description').getContent() != '' &&
             checkPhoneNumber == true) {
-              alert("evviva");
               ret = true;
         }
         return ret;
