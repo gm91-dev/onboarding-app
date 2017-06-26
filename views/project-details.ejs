@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Manage your project</title>
+  <title><%= title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -15,25 +15,24 @@
       plugins : 'advlist autolink link image lists charmap print preview'
     });
     var array_team_members = [];
-    function retrieveUserInformations(team_member_identifier){
-    	jQuery.post('/user/retrieveInfo/', {
-    		emailUser : team_member_identifier
+    function retrieveUserInformation(team_member_identifier){
+    	$.post('/user/retrieveInfo/', {
+    		user_email : team_member_identifier
     	}).done(function(data){
-    		if(data != 0) {
+        // alert("data : " + data);
+        // alert("JSON.stringify(data) : " + JSON.stringify(data));
+    		if(data.rowCount != 0 && data != null) {
     		  //Append email to list
     			$("#team_members_list").append("<li id=\""+ team_member_identifier +"\">" + team_member_identifier + "</li>");
           //Make the field blank
-          $('#project-team-members').val("");
+          $('#project_team_members').val("");
     			//Create user object and append it to array
     			var obj = {};
-    			var sub_obj = {};
           //da controllare i valori che riceviamo
-    			obj['name'] = data.credentials.name;
-    			obj['surname'] = data.credentials.surname;
-    			obj['photo'] = sub_obj;
-    			obj['email'] = data.email;
-    			obj['role'] = data.role;
-
+    			obj['name'] = data.rows[0].name;
+    			obj['surname'] = data.rows[0].surname;
+    			obj['email'] = data.rows[0].email;
+    			obj['role'] = data.rows[0].role;
     			array_team_members.push(obj);
     		}
     		else {
@@ -46,19 +45,74 @@
     }
     $(document).ready(function() {
       $('#btn_add_team_member').click(function() {
-      	var team_member_identifier = $('#project-team-members').val();
+      	var team_member_identifier = $('#project_team_members').val();
       	if ($("#team_members_list li:contains('" + team_member_identifier + "')").length>0) {
-      		bootbox.alert("This element already exists");
+      		bootbox.alert("This element already exists in the team members list!");
         }
       	else {
       		if(team_member_identifier == "")
       			bootbox.alert("Please insert a team member email!");
       		else {
-            //retrieveUserInformation(team_member_identifier);
+            // getting user information
+            retrieveUserInformation(team_member_identifier);
             //example - to do in above function $("#team_members_list").append("<li id=\""+ team_member_identifier +"\">" + team_member_identifier + "</li>");
           }
       	}
       });
+      function checkProjectFields () {
+        var ret = false;
+        if( $.trim($('#project_name').val()) != '' &&
+            tinymce.get('project_description').getContent() != '' &&
+            $.trim($('#project_budget').val()) != '' &&
+            array_team_members.length != 0) {
+              ret = true;
+            }
+        return ret;
+      }
+      function clearProjectFields () {
+        $('#project_name').val('');
+        tinymce.get('project_description').setContent('');
+        $('#project_budget').val('');
+        array_team_members = [];
+        $(team_members_list).empty();
+      }
+      // The post request below is to add a new project in the database
+      $("#save-project-button").click(function () {
+        if (!checkProjectFields()) {
+          bootbox.alert("Please fill up all the project fields!");
+        }
+        else {
+          var project_name = $('#project_name').val();
+          var project_description = tinymce.get('project_description').getContent();
+          var project_budget = $('#project_budget').val();
+          var project_team_members = array_team_members;
+          $.post('/project/save', {
+            project_name : project_name,
+            project_description : project_description,
+            project_budget : project_budget,
+            project_team_members : project_team_members
+    		  })
+            .done(function(data){
+              clearProjectFields();
+        			bootbox.alert("The new project has been successfully added!", function(){
+                window.location.reload();
+      			  });
+      		  })
+            .fail(function(err){
+              if(err.error == "conflict") {
+                bootbox.alert("The inserted project already exists. Please choose a different project name!", function(){
+                  window.location.reload();
+                });
+              }
+              else {
+        			  bootbox.alert("Sorry, an error occurred during the operation.<br>Please retry later...", function(){
+        				  window.location.reload();
+        			 });
+             }
+      		 });
+        }
+      });
+
     });
   </script>
   <style>
@@ -101,7 +155,7 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-project-name">Project Name</span>
-          <input id="project-name" type="text" class="form-control input-lg" placeholder="Project Name" aria-describedby="basic-addon1">
+          <input id="project_name" type="text" class="form-control input-lg" placeholder="Project Name" aria-describedby="basic-addon1">
         </div>
       </div>
     </div>
@@ -109,7 +163,7 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="description">Project Description:</label>
-          <textarea class="form-control" rows="5" id="project-description"></textarea>
+          <textarea class="form-control" rows="5" id="project_description"></textarea>
         </div>
       </div>
     </div>
@@ -117,7 +171,7 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-project-budget">Budget</span>
-          <input id="project-budget" type="text" class="form-control input-lg" placeholder="Budget" aria-describedby="basic-addon1">
+          <input id="project_budget" type="text" class="form-control input-lg" placeholder="Budget" aria-describedby="basic-addon1">
         </div>
       </div>
     </div>
@@ -125,7 +179,7 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-addon input-lg" id="basic-addon-project-team-members">Team Members</span>
-          <input id="project-team-members" type="text" class="form-control input-lg" placeholder="Type team member email here..." aria-describedby="basic-addon1">
+          <input id="project_team_members" type="text" class="form-control input-lg" placeholder="Type team member email here..." aria-describedby="basic-addon1">
         </div>
       </div>
       <div class="col-md-1">
@@ -141,7 +195,7 @@
       </div>
     </div>
     <div class="row top25">
-      <button id="save-button" type="button" class="btn btn-primary btn-lg btn-block">Save the new project</button>
+      <button id="save-project-button" type="button" class="btn btn-primary btn-lg btn-block">Save the new project</button>
     </div>
   </div>
 </body>

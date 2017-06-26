@@ -1,5 +1,7 @@
 // routes file
 var postgresql_db_controller = require('../controller/compose-postgresql-connection');
+var cloudantnosql_db_controller = require('../controller/cloudant-nosql-db-connection');
+
 var Q = require ('q');
 
 // route for editing the user
@@ -111,10 +113,92 @@ module.exports = function (app) {
     });
   });
 
+  // route for routing to "adding a new project" page
+  app.get('/project/add', function(req, res){
+  	res.render('project-details.ejs', {
+  		title : 'Create and manage your project'
+  	});
+  });
+
+  // route for retrieving user information from email
+  app.post('/user/retrieveInfo/', function(req, res){
+    var user_email = req.body.user_email;
+    console.log("EMAIL UTENTE : " + user_email);
+    postgresql_db_controller.getUserInformation(user_email).then(function(result){
+      console.log("RESULT USER INFO IN ROUTES: " + result.name);
+      if(result == null) {
+        console.log("eccoci");
+        res.writeHead(404);
+        res.end();
+        return;
+      }
+      else {
+        res.send(result);
+        res.end();
+      }
+    });
+  });
 
   // route for creating a new project
+  app.post('/project/save', function(req, res){
+    var project_name = req.body.project_name;
+    var project_description = req.body.project_description;
+    var project_budget = req.body.project_budget;
+    var project_team_members = req.body.project_team_members;
+    console.log("rotte-membri del team : " + req.body.project_team_members);
+    //storing the project into the database
+    cloudantnosql_db_controller.saveProjectDocument(project_name, project_description, project_budget, project_team_members).then(function(result){
+      if(result == null){
+        console.log("project err : " + result);
+  			res.writeHead(404);
+  			res.end();
+  			return;
+  		}
+      console.log("result of storing project data : " + result);
+      res.writeHead(200);
+  		res.end();
+    });
+  });
 
 
   // route for searching an existing project
+  app.get('/project/search/:projectID', function(req, res){
+    var project_name_to_search = req.params.projectID;
+    console.log("projectID : " + project_name_to_search);
+    cloudantnosql_db_controller.cloudantnosql_searchforproject(project_name_to_search).then(function(result, err){
+      console.log("risultato doc retrieved : " + result);
+      if(result == null){
+        console.log("risultato nullo retrieved : " + result);
+        res.writeHead(404);
+        res.end();
+        return;
+      }
+      else {
+        console.log("sono nell'else");
+        var project_description = result.project_description;
+        var project_budget = result.budget;
+        var project_team_members = result.team_members;
+        var project_team_members_string;
+        console.log("result.project_name : " + result.project_name);
+        console.log("result.budget : " + result.budget);
+        console.log("result.project_description : " + result.project_description);
+        console.log("result.team_members : " + result.team_members[0].email);
 
+        var index;
+        for (index = 0; index < project_team_members.length; ++index) {
+          project_team_members_string = project_team_members_string.concat(project_team_members[index].email);
+          project_team_members_string = project_team_members_string.concat(";");
+        }
+        console.log("project_team_members_string : " + project_team_members_string);
+
+        res.render('project-search.ejs', {
+      		title : 'Project info',
+          project_name : project_name_to_search,
+          project_description : project_description,
+          project_budget : project_budget,
+          project_team_members_string : project_team_members_string
+      	});
+      }
+    });
+  });
 };

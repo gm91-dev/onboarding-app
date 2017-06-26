@@ -25,7 +25,34 @@
   </style>
   <script type="text/javascript">
     $(document).ready(function() {
-      //
+/*
+      $("#btn-project-search").click(function () {
+        var project_name_to_search = $.trim($('#project-type-search').val());
+        if (project_name_to_search == '') {
+          bootbox.alert("Please type a project name you want to search!");
+        }
+        else {
+          $.post('/project/search', {
+            project_name_to_search : project_name_to_search
+          })
+            .done(function(data){
+              alert("data search : " + data);
+            })
+            .fail(function(e){
+              alert("error search : " + e);
+           });
+        }
+      });
+*/
+      $("#btn-project-search").click(function () {
+        var project_name_to_search = $.trim($('#project-type-search').val());
+        if (project_name_to_search == '') {
+          bootbox.alert("Please type a project name you want to search!");
+        }
+        else {
+          $(location).attr('href', '/project/search/' + project_name_to_search);
+        }
+      });
     });
   </script>
 </head>
@@ -49,10 +76,20 @@
   </div>
   <div class="row top30">
     <div class="col-md-6">
-      <button type="button" class="btn btn-primary btn-xl btn-block">Create a project</button>
+      <a href="/project/add">
+        <button type="button" class="btn btn-primary btn-xl btn-block">Create a project</button>
+      </a>
     </div>
     <div class="col-md-6">
-      <button type="button" class="btn btn-primary btn-xl btn-block">Search for a project</button>
+      <div class="row">
+        <button id="btn-project-search" type="button" class="btn btn-primary btn-xl btn-block">Search for a project</button>
+      </div>
+      <div class="row">
+        <div class="input-group">
+          <span class="input-group-addon input-lg" id="basic-addon-search-project"></span>
+          <input id="project-type-search" type="text" class="form-control input-lg" placeholder="Type project name here..." aria-describedby="basic-addon1">
+        </div>
+      </div>
     </div>
   </div>
 </div>

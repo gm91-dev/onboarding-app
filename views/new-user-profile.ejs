@@ -40,18 +40,82 @@
   </style>
   <script type="text/javascript">
     $(document).ready(function() {
-      function checkUserFields () {
+      var checkPhoneNumber = false;
+      $('#btn_check_phone_number').click(function() {
+        var phoneNumber = $.trim($('#telephone').val());
+        var scriptUrl = "http://apilayer.net/api/validate?access_key=" + "94b214bebea26ee2b2d391ed411f13ca" + "&number=" + phoneNumber + "&format=1";
+        $.ajax({
+          url: scriptUrl,
+          type: 'get',
+          dataType: 'html',
+          async: false,
+          success: function(data) {
+              checkPhoneNumber = true;
+          }
+        });
+      });
+
+      function checkUserFields() {
         var ret = false;
         if( $.trim($('#email').val()) != '' &&
             $.trim($('#name').val()) != '' &&
             $.trim($('#surname').val()) != '' &&
             $.trim($('#role').val()) != '' &&
-            $.trim($('#telephone').val()) != '' &&
-            tinymce.get('description').getContent() != '') {
+            tinymce.get('description').getContent() != '' &&
+            checkPhoneNumber == true) {
+              alert("evviva");
               ret = true;
-            }
+        }
         return ret;
       }
+/*
+        var ret = false;
+        var telephone = $.trim($('#telephone').val());
+        $.get("http://apilayer.net/api/validate?access_key=" + "94b214bebea26ee2b2d391ed411f13ca" + "&number=" + phoneNumber + "&format=1", function(data, status) {
+          if(data.valid) {
+            if( $.trim($('#email').val()) != '' &&
+                $.trim($('#name').val()) != '' &&
+                $.trim($('#surname').val()) != '' &&
+                $.trim($('#role').val()) != '' &&
+                tinymce.get('description').getContent() != '') {
+                  alert("evviva");
+                  ret = true;
+            }
+            else {
+              ret = false;
+            }
+          }
+          else {
+            ret = false;
+          }
+        });
+
+        return ret;
+      }
+        /*
+        checkPhoneNumber(telephone, function(){
+          if(checkPhone) {
+            ret = true
+            if( $.trim($('#email').val()) != '' &&
+                $.trim($('#name').val()) != '' &&
+                $.trim($('#surname').val()) != '' &&
+                $.trim($('#role').val()) != '' &&
+                tinymce.get('description').getContent() != '') {
+                  alert("evviva");
+                  return ret;
+            }
+            else {
+              ret = false;
+            }
+          }
+            else {
+              ret = false;
+            }
+        });
+        */
+          // bootbox.alert("Please check the phone number again. The format could be wrong!");
+        // alert("no qui");
+        // return ret;
 
       function clearUserFields () {
         $('#email').val('');
@@ -80,6 +144,7 @@
         else {
           if (!checkUserFields()) {
             bootbox.alert("Please fill up all the user fields!");
+            return;
           }
           else {
             var email = $('#email').val();
@@ -98,20 +163,19 @@
       		  })
               .done(function(data){
                 if(data.duplicate_user == true) { //if it's true means the user already exists
-                  alert('<h2>The inserted user already exists. Please choose a different email!</h2>', function(){
+                  bootbox.alert("The inserted user already exists. Please choose a different email!", function(){
                     window.location.reload();
                   });
                 }
                 else {
                   clearUserFields();
-            			alert('<h2>The new user has been successfully added!</h2>', function(){
+            			bootbox.alert("The new user has been successfully added!", function(){
                     window.location.reload();
           			  });
                 }
         		  })
               .fail(function(e){
-                alert(JSON.stringify(e));
-        			  alert('<h2>Sorry, an error occurred during the operation.<br>Please retry later...</h2>', function(){
+        			  bootbox.alert("Sorry, an error occurred during the operation.<br>Please retry later...", function(){
         				  window.location.reload();
         			 });
         		 });
@@ -178,6 +242,11 @@
           <span class="input-group-addon input-lg" id="basic-addon-phone">Phone</span>
           <input id="telephone" type="text" class="form-control input-lg" placeholder="Telephone number" aria-describedby="basic-addon1">
         </div>
+      </div>
+      <div class="col-md-1">
+        <button id="btn_check_phone_number" type="button" class="btn btn-primary btn-lg" aria-label="Right Align">
+          <span class="glyphicon glyphicon-edit">Check</span>
+				</button>
       </div>
     </div>
     <div class="panel panel-primary">

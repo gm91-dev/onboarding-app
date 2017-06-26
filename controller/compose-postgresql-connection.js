@@ -208,6 +208,32 @@ module.exports.postgresql_read_admin_info = function(role) {
   return deferred.promise;
 };
 
+module.exports.getUserInformation = function(user_email) {
+  var deferred = Q.defer();
+  // set up a new client using our config details
+  var client = new pg.Client(config);
+  client.connect(function(err) {
+    if (err) {
+     console.log(err);
+     deferred.reject();
+    }
+    else {
+      var queryText = 'SELECT * FROM users where email = $1 LIMIT 1';
+      client.query(queryText, [user_email], function (error,result){
+        if (error) {
+         console.log(error);
+         deferred.reject();
+        }
+        else {
+          console.log("INFO UTENTE : " + result.name);
+          deferred.resolve(result);
+        }
+      });
+    }
+  });
+  return deferred.promise;
+};
+
 // This function is to check if there is a row with admin user into the database
 module.exports.check_existing_admin = function(role) {
   var deferred = Q.defer();

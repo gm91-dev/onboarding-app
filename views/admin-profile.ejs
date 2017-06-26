@@ -93,14 +93,13 @@
           description : description
   		  })
           .done(function(){
-      			alert('<h2>The new user has been successfully added!</h2>', function(){
+      			bootbox.alert("The new user has been successfully added!", function(){
       				clearUserFields();
               window.location.reload();
     			  });
     		  })
           .fail(function(e){
-            alert(JSON.stringify(e));
-    			  alert('<h2>Sorry, an error occurred during the operation.<br>Please retry later...</h2>', function(){
+    			  bootbox.alert("Sorry, an error occurred during the operation.<br>Please retry later...", function(){
     				  window.location.reload();
     			 });
     		 });

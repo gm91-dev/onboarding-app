@@ -50,6 +50,8 @@ PostgreSQL_DB_controller.check_and_create_admin_user();
 
 var CloudantNoSQL_DB_controller = require('./controller/cloudant-nosql-db-connection');
 CloudantNoSQL_DB_controller.initDBConnection();
+//var array3 = ["1","2","3"];
+//CloudantNoSQL_DB_controller.saveProjectDocument("project_name3","project_description","budget",array3);
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, '0.0.0.0', function() {

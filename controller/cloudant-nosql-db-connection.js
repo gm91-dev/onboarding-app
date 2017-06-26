@@ -1,6 +1,8 @@
 // controller for the connection with cloudant nosql database
 var fs = require('fs');
 
+var Q = require ('q');
+
 var db;
 
 var cloudant;
@@ -56,7 +58,51 @@ module.exports.initDBConnection = function() {
     });
 
     db = cloudant.use(dbCredentials.dbName);
-}
+};
 
 // This function is called on app.js main file
 // initDBConnection();
+
+// This function is to insert a project into the nosql database, save a document and insert
+module.exports.saveProjectDocument = function(project_name, project_description, budget, team_members) {
+	// Here the code to retrieve the parameters and insert a new project document in the database
+	// remember that the project name must be unique
+	var deferred = Q.defer();
+	console.log("project_name : " + project_name);
+	console.log("team_members : " + team_members);
+	db.insert({
+		project_name : project_name,
+		project_description : project_description,
+		budget : budget,
+		team_members : team_members
+	}, project_name, function(err, doc) {
+		if (err) {
+			console.log(err);
+			console.log("err.error : " + err.error);
+			deferred.reject();
+		}
+		else {
+			console.log(doc);
+			deferred.resolve(doc);
+		}
+	});
+	return deferred.promise;
+};
+
+module.exports.cloudantnosql_searchforproject = function(project_name_to_search) {
+	var deferred = Q.defer();
+	var id_project = project_name_to_search;
+	db.get(id_project, {
+        revs_info: true
+    }, function(err, doc) {
+        if (!err) {
+          console.log("DOCUMENT RETRIEVED AND SEARCHED : " + doc);
+					deferred.resolve(doc);
+        }
+				else {
+          console.log("ERR IN RETRIEVING DOC - ERR : " + err);
+					deferred.reject();
+				}
+    });
+		return deferred.promise;
+};
